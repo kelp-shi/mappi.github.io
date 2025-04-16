@@ -34,22 +34,34 @@ let blackMask = L.polygon(outerBounds, {
 
 // いったんマップに追加
 blackMask.addTo(map);
+let marker;
 
 // 位置情報の監視をスタート
 navigator.geolocation.watchPosition(
   (pos) => {
+    console.log("get");
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
 
     // 例：半径50mの円を穴として追加するとする（実際には多角形化が必要）
     // 正確には円をGeoJSONポリゴンに変換し、holes配列にpushする。
-    const holeCircle = createCirclePolygon([lat, lon], 10);
+    const holeCircle = createCirclePolygon([lat, lon], 50);
 
     holes.push(holeCircle);
 
     // outerBounds (黒) から holes を差し引いた形のジオメトリを作成して再描画する
     const newGeoJson = createMaskWithHoles(outerBounds, holes);
     blackMask.setLatLngs(newGeoJson);
+    console.log("getend");
+
+    if (marker) {
+      marker.setLatLng([lat, lon]);
+    } else {
+      marker = L.marker([lat, lon]).addTo(map);
+    }
+
+    // 現在地に地図を移動
+    map.setView([lat, lon], map.getZoom());
   },
   (err) => console.error(err),
   { enableHighAccuracy: true }
