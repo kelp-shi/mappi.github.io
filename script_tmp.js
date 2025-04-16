@@ -46,7 +46,7 @@ navigator.geolocation.watchPosition(
     // 移動距離が非常に小さい場合は新たな穴を追加しない（例：50m未満ならスキップ）
     if (lastHoleCenter) {
       const distance = map.distance(lastHoleCenter, currentCenter);
-      if (distance < 50) {
+      if (distance < 10) {
         console.log("移動距離が短いため、穴は追加しません。");
       } else {
         addHole(currentCenter);
