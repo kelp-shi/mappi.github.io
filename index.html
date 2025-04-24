@@ -52,7 +52,7 @@
               console.log(`移動距離: ${distance} km`);
             }
             lastPosition = currentCenter;
-            if (distance < 0.009 || distance == null) {
+            if (distance < 0.0009 || distance == null) {
               console.log("移動距離が短いため、穴は追加しません。");
               document.getElementById("debuglog").textContent = "移動距離が短いため、穴は追加しません。" + distance.toFixed(3) + "km";
             } else {
