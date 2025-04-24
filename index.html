@@ -19,6 +19,7 @@
     <div id="map" style="height: 80%; width: 100%"></div>
     <footer>
       <p>移動距離<span id="distance">0</span>Km</p>
+      <p>log:<span id="debuglog"></span></p>
     </footer>
     <script>
       mapboxgl.accessToken =
@@ -53,6 +54,7 @@
             lastPosition = currentCenter;
             if (distance < 0.009 || distance == null) {
               console.log("移動距離が短いため、穴は追加しません。");
+              document.getElementById("debuglog").textContent = "移動距離が短いため、穴は追加しません。" + distance;
             } else {
               // 座標をコンソールに表示
               console.log(`${longitude}, ${latitude}`);
