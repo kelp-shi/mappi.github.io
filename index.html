@@ -1,22 +1,84 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html style="height: 100%">
+  <head>
     <title>test map</title>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
-</head>
-<body>
-<button class="test">test</button>
-<button class="save">save</button>
-<a href="index_tml.html">Develop Map</a>
-<pre id="position_view"></pre>
-<div id="map_leaflet" style="height: 600px;"></div>
-<div class="list">
-    <ul>
-    </ul>
-</div>
-<script src="./script.js"></script>
-</body>
+    <meta charset="utf-8" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body style="height: 100%">
+    <header style="width: 100%; position: sticky; height: 60px;">
+      <button class="test">test</button>
+      <button class="save">save</button>
+      <a href="index_tml.html">Develop Map</a>
+    </header>
+    <div id="map" style="height: 80%; width: 100%"></div>
+    <footer>
+      <p>移動距離<span id="distance">0</span>Km</p>
+    </footer>
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1Ijoia2VscC1zaGkiLCJhIjoiY205bDhjd3B5MDI1bDJrcHpiNDBtajE1dCJ9.dkH3czmqqFCxc_SjukK-cg";
+
+      var map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [139.7670516, 35.6811673],
+        zoom: 15,
+      });
+
+      lastPosition = null;
+      totalLenge = null;
+
+      // 現在地を定期的に取得
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+          function (position) {
+            const { latitude, longitude } = position.coords;
+            const currentCenter = [longitude, latitude];
+            var distance;
+
+            if (lastPosition) {
+              distance = turf.distance(
+                turf.point(lastPosition),
+                turf.point(currentCenter),
+                { units: "kilometers" }
+              );
+              console.log(`移動距離: ${distance} km`);
+            }
+            lastPosition = currentCenter;
+            if (distance < 0.009 || distance == null) {
+              console.log("移動距離が短いため、穴は追加しません。");
+            } else {
+              // 座標をコンソールに表示
+              console.log(`${longitude}, ${latitude}`);
+              // マップの中心を移動（必要であれば）
+              map.setCenter([longitude, latitude]);
+              // 現在地のマーカーを追加（必要に応じて）
+              new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+              if(totalLenge){
+                totalLenge = totalLenge + distance.toFixed(3);
+                document.getElementById("distance").textContent = totalLenge.toFixed(3);
+              } else {
+                totalLenge = distance.toFixed(3);
+              }
+            }
+          },
+          function (error) {
+            console.error("位置情報の取得に失敗しました: ", error.message);
+          },
+          {
+            enableHighAccuracy: true, // 高精度モードを有効化
+            maximumAge: 0, // キャッシュを無効化
+          }
+        );
+      } else {
+        console.error("このブラウザは位置情報APIをサポートしていません。");
+      }
+    </script>
+  </body>
 </html>
