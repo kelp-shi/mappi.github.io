@@ -2,7 +2,7 @@
 const map = L.map("mapid", {
   minZoom: 3,
   maxZoom: 18,
-}).setView([35.658, 139.745], 14);
+}).setView([35.658, 139.745], 3);
 map.setMaxBounds([
   [-85, -180], // 南西端
   [85, 180],   // 北東端
