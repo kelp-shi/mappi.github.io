@@ -56,6 +56,7 @@
               console.log("移動距離が短いため、穴は追加しません。");
               document.getElementById("debuglog").textContent = "移動距離が短いため、穴は追加しません。" + distance.toFixed(3) + "km";
             } else {
+              document.getElementById("debuglog").textContent = "距離を追加";
               // 座標をコンソールに表示
               console.log(`${longitude}, ${latitude}`);
               // マップの中心を移動（必要であれば）
