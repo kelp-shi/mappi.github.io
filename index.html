@@ -60,12 +60,8 @@
               map.setCenter([longitude, latitude]);
               // 現在地のマーカーを追加（必要に応じて）
               new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
-              if(totalLenge){
-                totalLenge = totalLenge + distance.toFixed(3);
-                document.getElementById("distance").textContent = totalLenge.toFixed(3);
-              } else {
-                totalLenge = distance.toFixed(3);
-              }
+              totalLenge = totalLenge + distance.toFixed(3);
+              document.getElementById("distance").textContent = totalLenge.toFixed(3);
             }
           },
           function (error) {
