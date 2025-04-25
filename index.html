@@ -64,7 +64,7 @@
               map.setCenter([longitude, latitude]);
               // 現在地のマーカーを追加（必要に応じて）
               new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
-              totalLenge = totalLenge + distance.toFixed(3);
+              totalLenge += parseFloat(distance.toFixed(3));
               document.getElementById("distance").textContent = totalLenge;
             }
           },
