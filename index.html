@@ -34,6 +34,7 @@
 
       lastPosition = null;
       totalLenge = 0;
+      document.getElementById("distance").textContent = totalLenge;
 
       // 現在地を定期的に取得
       if (navigator.geolocation) {
@@ -54,7 +55,6 @@
             lastPosition = currentCenter;
             if (distance < 0.0009 || distance == 0) {
               console.log("移動距離が短いため、穴は追加しません。");
-              document.getElementById("distance").textContent = 0;
               document.getElementById("debuglog").textContent = "移動距離が短いため、穴は追加しません。" + distance.toFixed(3) + "km";
             } else {
               document.getElementById("debuglog").textContent = "距離を追加";
