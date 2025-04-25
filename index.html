@@ -18,7 +18,7 @@
     </header>
     <div id="map" style="height: 80%; width: 100%"></div>
     <footer>
-      <p>移動距離<span id="distance">0</span>Km</p>
+      <p>移動距離<span id="distance"></span>Km</p>
       <p>log:<span id="debuglog"></span></p>
     </footer>
     <script>
@@ -33,7 +33,7 @@
       });
 
       lastPosition = null;
-      totalLenge = null;
+      totalLenge = 0;
 
       // 現在地を定期的に取得
       if (navigator.geolocation) {
@@ -41,7 +41,7 @@
           function (position) {
             const { latitude, longitude } = position.coords;
             const currentCenter = [longitude, latitude];
-            var distance;
+            var distance = 0;
 
             if (lastPosition) {
               distance = turf.distance(
@@ -52,8 +52,9 @@
               console.log(`移動距離: ${distance} km`);
             }
             lastPosition = currentCenter;
-            if (distance < 0.0009 || distance == null) {
+            if (distance < 0.0009 || distance == 0) {
               console.log("移動距離が短いため、穴は追加しません。");
+              document.getElementById("distance").textContent = 0;
               document.getElementById("debuglog").textContent = "移動距離が短いため、穴は追加しません。" + distance.toFixed(3) + "km";
             } else {
               document.getElementById("debuglog").textContent = "距離を追加";
@@ -64,7 +65,7 @@
               // 現在地のマーカーを追加（必要に応じて）
               new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
               totalLenge = totalLenge + distance.toFixed(3);
-              document.getElementById("distance").textContent = totalLenge.toFixed(3);
+              document.getElementById("distance").textContent = totalLenge;
             }
           },
           function (error) {
